@@ -19,7 +19,7 @@ const seedProducts = async () => {
         name_hindi: 'आम का अचार',
         description: 'Traditional Indian mango pickle made with raw mangoes, aromatic spices, and mustard oil. Perfect accompaniment for parathas, rice, and curries.',
         category: 'pickle',
-        image_url: '/uploads/mango-pickle.jpg',
+        image_url: process.env.BASE_URL + '/uploads/mango-pickle.jpg',
         ingredients: 'Raw Mango, Mustard Oil, Salt, Red Chili, Turmeric, Fenugreek, Fennel Seeds, Mustard Seeds',
         shelf_life: '12 months',
         storage_instructions: 'Store in a cool, dry place. Always use a dry spoon.'
@@ -29,7 +29,7 @@ const seedProducts = async () => {
         name_hindi: 'निम्बू का अचार',
         description: 'Tangy and spicy lemon pickle prepared with fresh lemons and authentic Indian spices. A burst of flavor in every bite.',
         category: 'pickle',
-        image_url: '/uploads/lemon-pickle.jpg',
+        image_url: process.env.BASE_URL + '/uploads/lemon-pickle.jpg',
         ingredients: 'Lemon, Mustard Oil, Salt, Red Chili Powder, Turmeric, Fenugreek Seeds, Asafoetida',
         shelf_life: '12 months',
         storage_instructions: 'Store in a cool, dry place. Always use a dry spoon.'
@@ -39,7 +39,7 @@ const seedProducts = async () => {
         name_hindi: 'निम्बू मिर्ची का अचार',
         description: 'Fiery and tangy combination of lemon and green chilies. Perfect for spice lovers who want an extra kick with their meals.',
         category: 'pickle',
-        image_url: '/uploads/lemon-chili-pickle.jpg',
+        image_url: process.env.BASE_URL + '/uploads/lemon-chili-pickle.jpg',
         ingredients: 'Lemon, Green Chili, Mustard Oil, Salt, Red Chili Powder, Turmeric, Fenugreek, Mustard Seeds',
         shelf_life: '12 months',
         storage_instructions: 'Store in a cool, dry place. Always use a dry spoon.'
@@ -49,7 +49,7 @@ const seedProducts = async () => {
         name_hindi: 'आंवला का अचार',
         description: 'Nutritious and delicious Indian gooseberry pickle packed with Vitamin C. Tangy, spicy, and incredibly healthy.',
         category: 'pickle',
-        image_url: '/uploads/amla-pickle.jpg',
+        image_url: process.env.BASE_URL + '/uploads/amla-pickle.jpg',
         ingredients: 'Amla (Indian Gooseberry), Mustard Oil, Salt, Red Chili, Turmeric, Fenugreek, Cumin Seeds',
         shelf_life: '12 months',
         storage_instructions: 'Store in a cool, dry place. Always use a dry spoon.'
@@ -97,7 +97,7 @@ const seedProducts = async () => {
       }
 
       for (const variant of variants) {
-        const sku = `JSS-${pickle.name_english.substring(0, 3).toUpperCase()}-${variant.weight.replace(' ', '')}`;
+        const sku = `JSS-${pickle.name_english.replace(/\s+/g,'').toUpperCase()}-${variant.weight.replace(' ', '')}`;
         await client.query(
           'INSERT INTO product_variants (product_id, weight, price, stock_quantity, sku) VALUES ($1, $2, $3, $4, $5)',
           [productId, variant.weight, variant.price, variant.stock, sku]
@@ -111,7 +111,7 @@ const seedProducts = async () => {
       name_hindi: 'जैन साहब स्पेशल अचार मसाला',
       description: 'Premium blend of traditional Indian spices specially crafted for making authentic pickles at home. Made with handpicked spices roasted to perfection.',
       category: 'masala',
-      image_url: '/uploads/achaar-masala.jpg',
+      image_url: process.env.BASE_URL + '/uploads/achaar-masala.jpg',
       ingredients: 'Coriander Seeds, Cumin Seeds, Fenugreek Seeds, Fennel Seeds, Mustard Seeds, Turmeric, Red Chili, Black Salt, Asafoetida, Nigella Seeds',
       usage_instructions: 'Mix 2-3 tablespoons of masala per kg of vegetable/fruit. Add salt and oil as required. Let it marinate in sunlight for 7-10 days.',
       shelf_life: '18 months',
@@ -146,9 +146,11 @@ const seedProducts = async () => {
     ];
 
     for (const variant of masalaVariants) {
-      const sku = `JSS-MASALA-${variant.weight.replace(' ', '')}`;
+      const sku = `JSS-${masalaId}-${variant.weight.replace(' ', '')}`;
       await client.query(
-        'INSERT INTO product_variants (product_id, weight, price, stock_quantity, sku) VALUES ($1, $2, $3, $4, $5)',
+        `INSERT INTO product_variants (product_id, weight, price, stock_quantity, sku)
+        VALUES ($1,$2,$3,$4,$5)
+        ON CONFLICT (sku) DO NOTHING`,
         [masalaId, variant.weight, variant.price, variant.stock, sku]
       );
     }
@@ -164,3 +166,15 @@ const seedProducts = async () => {
 };
 
 module.exports = { seedProducts };
+
+if (require.main === module) {
+  seedProducts()
+    .then(() => {
+      console.log("Seeding complete");
+      process.exit(0);
+    })
+    .catch(err => {
+      console.error("Seeding failed:", err);
+      process.exit(1);
+    });
+}
