@@ -2,13 +2,13 @@
 
 A modern, production-grade e-commerce website for premium Indian pickles and traditional achaar masala.
 
- 
+<img width="940" height="470" alt="image" src="https://github.com/user-attachments/assets/b0424920-7053-4b2c-b53a-0e60233378f2" />
 
- 
+<img width="940" height="443" alt="image" src="https://github.com/user-attachments/assets/4af9eee0-6cc5-4f2a-9477-f20305e7948a" />
 
- 
+<img width="940" height="480" alt="image" src="https://github.com/user-attachments/assets/19c535ff-c139-47fc-9563-3c11cd7b3f59" />
 
- 
+<img width="940" height="452" alt="image" src="https://github.com/user-attachments/assets/72c65bd2-9e41-466d-86ab-1cddd521bb3d" />
 
 
 ## 🚀 Quick Start
