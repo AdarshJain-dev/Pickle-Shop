@@ -2,6 +2,15 @@
 
 A modern, production-grade e-commerce website for premium Indian pickles and traditional achaar masala.
 
+ 
+
+ 
+
+ 
+
+ 
+
+
 ## 🚀 Quick Start
 
 **Live Website:** http://54.160.231.34/
